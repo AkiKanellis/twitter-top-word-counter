@@ -6,7 +6,7 @@ public class User {
         _username = username;
         _password = password;
     }
-    // FIXME add setters, getters
+    
     public User(User user){
         _username = user.getUsername();
         _password = user.getPassword();

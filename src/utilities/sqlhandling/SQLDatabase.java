@@ -23,14 +23,14 @@ public class SQLDatabase {
     public SQLDatabase(final String name, final Connector connector) {
         _name = name;
         _connector = connector;
-        _url = connector.getURL() + name + urlEncoding;
+        _url = connector.getURL() + name + URL_ENCODING;
     }
 
     public String getName() {
         return _name;
     }
 
-    public void changeName(final String newName) {
+    public void setName(final String newName) {
         _name = newName;
         _url = _connector.getURL() + newName;
     }
@@ -48,8 +48,8 @@ public class SQLDatabase {
 
         Printer.println("Connecting to database...");
         try (Connection con = DriverManager.getConnection(_url,
-                _connector.getUser()._username,
-                _connector.getUser()._password);) {
+                _connector.getUser().getUsername(),
+                _connector.getUser().getPassword());) {
 
             Printer.println("Retrieving tables...");
             DatabaseMetaData metadata = con.getMetaData();
@@ -61,7 +61,8 @@ public class SQLDatabase {
                 return tables;
             }
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error " + se.getErrorCode() + ' ' + se.getMessage());
+            Printer.printErrln("SQL Error " + se.getErrorCode() + " "
+                    + se.getMessage());
             return tables;
         }
     }
@@ -76,14 +77,15 @@ public class SQLDatabase {
 
         Printer.println("Connecting to database...");
         try (Connection con = DriverManager.getConnection(_url,
-                _connector.getUser()._username,
-                _connector.getUser()._password);
+                _connector.getUser().getUsername(),
+                _connector.getUser().getPassword());
                 Statement stmt = con.createStatement()) {
 
             Printer.println("Creating table...");
             stmt.executeUpdate(CREATE_TABLE_QUERY + tableName + TABLE_COLUMNS);
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error " + se.getErrorCode() + ' ' + se.getMessage());
+            Printer.printErrln("SQL Error " + se.getErrorCode() + " "
+                    + se.getMessage());
         }
     }
 
@@ -97,14 +99,15 @@ public class SQLDatabase {
 
         Printer.println("Connecting to database...");
         try (Connection con = DriverManager.getConnection(_url,
-                _connector.getUser()._username,
-                _connector.getUser()._password);
+                _connector.getUser().getUsername(),
+                _connector.getUser().getPassword());
                 Statement stmt = con.createStatement()) {
 
             Printer.println("Deleting table...");
             stmt.executeUpdate(DELETE_TABLE_QUERY + tableName);
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error " + se.getErrorCode() + ' ' + se.getMessage());
+            Printer.printErrln("SQL Error " + se.getErrorCode() + " "
+                    + se.getMessage());
         }
     }
 
@@ -115,84 +118,118 @@ public class SQLDatabase {
         } catch (ClassNotFoundException e) {
             Printer.printErrln("Driver Error: " + e.getMessage());
         }
-        try (Connection con = DriverManager.getConnection(_url,
-                _connector.getUser()._username,
-                _connector.getUser()._password);
-                PreparedStatement pst = con.prepareStatement(INSERT_INTO_QUERY + tableName + PST_COLUMNS);) {
 
+        Printer.println("Connecting to database...");
+        try (Connection con = DriverManager.getConnection(_url,
+                _connector.getUser().getUsername(),
+                _connector.getUser().getPassword());
+                PreparedStatement pst = con.prepareStatement(INSERT_INTO_QUERY
+                        + tableName + PST_COLUMNS);) {
+
+            Printer.println("Adding tweets into the table...");
             int linesNum = 0;
             for (Status status : statuses) {
                 if (!rowExists(status, con, tableName)) {
                     pst.setLong(1, status.getId());
-                    pst.setDate(2, new java.sql.Date(status.getCreatedAt().getTime()));
+
+                    pst.setDate(2, new java.sql.Date(
+                            status
+                            .getCreatedAt()
+                            .getTime()));
+
                     pst.setString(3, status.getUser().getScreenName());
                     pst.setString(4, getTweetText(status));
-                    pst.setString(5, TweetCleaning.tweetToWords(getTweetText(status)));
-                    pst.setString(6, status.getSource().replaceAll("[^\\p{ASCII}]", " "));
-                    if (status.getGeoLocation() != null) {
-                        pst.setString(7, 
-                                Double.toString(status.getGeoLocation().getLatitude())
-                                + ";"
-                                + Double.toString(status.getGeoLocation().getLongitude()));
-                    } else {
-                        pst.setString(7, null);
-                    }
+
+                    pst.setString(5,
+                            TweetCleaning.tweetToWords(getTweetText(status)));
+
+                    pst.setString(6,
+                            status
+                            .getSource()
+                            .replaceAll("[^\\p{ASCII}]", " "));
+
+                    pst.setString(7, Converter.geolocationToString(
+                            status.getGeoLocation()));
+
                     pst.setString(8, status.getLang());
                     pst.setInt(9, status.getFavoriteCount());
                     pst.setInt(10, status.getRetweetCount());
-                    pst.setString(11, Converter.hashtagArrayToString(status.getHashtagEntities()));
+
+                    pst.setString(11, Converter.hashtagArrayToString(
+                            status.getHashtagEntities()));
 
                     pst.executeUpdate();
                     linesNum++;
                 }
             }
-            Printer.println("Total tweets inserted into the database: " + linesNum);
+            Printer.println("Total tweets inserted into the table: "
+                    + linesNum);
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error " + se.getErrorCode() + ' ' + se.getMessage());
+            Printer.printErrln("SQL Error " + se.getErrorCode() + " "
+                    + se.getMessage());
         }
     }
 
     public List<String> getField(final String field, final String tableName) {
         List<String> editedText = new ArrayList<>();
         final String query = "SELECT " + field + " FROM " + tableName;
-        //+ " WHERE `id` = '$eventid' ";
-        Connection con = null;
-        Statement stmt = null;
 
+        Printer.println("Getting driver...");
         try {
             Class.forName(_connector.getDriver());
-            con = DriverManager.getConnection(_url,
-                    _connector.getUser()._username,
-                    _connector.getUser()._password);
-            stmt = con.prepareStatement(query);
-
-            Printer.println("Executing query...");
-            ResultSet rs = stmt.executeQuery(query);
-
-            while (rs.next()) {
-                editedText.add(rs.getString(field));
-            }
-        } catch (SQLException se) {
-            Printer.printErrln("SQL Error: " + se.getErrorCode() + " " + se.getMessage());
-            System.out.println();
         } catch (ClassNotFoundException e) {
             Printer.printErrln("Driver Error: " + e.getMessage());
-        } finally {
-            //finally block used to close resources
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException se) {
-            }// do nothing
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException se) {
-            }//end finally try            
             return editedText;
-        }//end try
+        }
+
+        Printer.println("Connecting to database...");
+        try (Connection con = DriverManager.getConnection(_url,
+                _connector.getUser().getUsername(),
+                _connector.getUser().getPassword());
+                Statement stmt = con.createStatement()) {
+
+            Printer.println("Getting field from table...");
+            try (ResultSet rs = stmt.executeQuery(query);) {
+                while (rs.next()) {
+                    editedText.add(rs.getString(field));
+                }
+                return editedText;
+            }
+        } catch (SQLException se) {
+            Printer.printErrln("SQL Error " + se.getErrorCode() + " "
+                    + se.getMessage());
+            return editedText;
+        }
+    }
+
+    public int getRowsCount(final String tableName) {
+        int rowsCount = -1;
+        final String query = COUNT_ROWS_QUERY + tableName;
+
+        Printer.println("Getting driver...");
+        try {
+            Class.forName(_connector.getDriver());
+        } catch (ClassNotFoundException e) {
+            Printer.printErrln("Driver Error: " + e.getMessage());
+            return rowsCount;
+        }
+
+        Printer.println("Connecting to database...");
+        try (Connection con = DriverManager.getConnection(_url,
+                _connector.getUser().getUsername(),
+                _connector.getUser().getPassword());
+                PreparedStatement stmt = con.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery(query);) {
+
+            Printer.println("Getting number of rows...");
+            rs.next();
+            rowsCount = rs.getInt(1);
+            return rowsCount;
+        } catch (SQLException se) {
+            Printer.printErrln("SQL Error: " + se.getErrorCode() + " "
+                    + se.getMessage());
+            return rowsCount;
+        }
     }
 
     private boolean rowExists(final Status status, final Connection con,
@@ -200,60 +237,30 @@ public class SQLDatabase {
         final String query = "SELECT *"
                 + " FROM " + tableName
                 + " WHERE id = '" + status.getId() + "'";
-        final PreparedStatement ps = con.prepareStatement(query);
-        final ResultSet resultSet = ps.executeQuery();
-
-        return resultSet.next();
-    }
-
-    public int getRowsCount(final String tableName) {
-        int rowsCount = -1;
-        final String query = "SELECT COUNT(*) FROM " + tableName;
-        Connection con = null;
-        PreparedStatement stmt = null;
-        try {
-            Class.forName(_connector.getDriver());
-            con = DriverManager.getConnection(_url,
-                    _connector.getUser()._username,
-                    _connector.getUser()._password);
-            stmt = con.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            rowsCount = rs.getInt(1);
-        } catch (SQLException se) {
-            Printer.printErrln("SQL Error: " + se.getErrorCode() + " " + se.getMessage());
-            System.out.println();
-        } catch (ClassNotFoundException e) {
-            Printer.printErrln("Driver Error: " + e.getMessage());
-        } finally {
-            //finally block used to close resources
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException se) {
-            }// do nothing
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException se) {
-            }//end finally try            
-            return rowsCount;
-        }//end try
+        try (PreparedStatement ps = con.prepareStatement(query);
+                ResultSet resultSet = ps.executeQuery();) {
+            return resultSet.next();
+        }
     }
 
     private static String getTweetText(Status status) {
         if (status.isRetweet()) {
-            return status.getRetweetedStatus().getText().replaceAll("[^\\p{ASCII}]", " ");
+            return status
+                    .getRetweetedStatus()
+                    .getText()
+                    .replaceAll("[^\\p{ASCII}]", " ");
         } else {
             return status.getText().replaceAll("[^\\p{ASCII}]", " ");
         }
     }
-    
-    private static final String urlEncoding = "?characterEncoding=UTF-8";
+
+    private static final String URL_ENCODING = "?characterEncoding=UTF-8";
 
     private static final String CREATE_TABLE_QUERY = "Create TABLE ";
+    private static final String DELETE_TABLE_QUERY = "Drop TABLE ";
+    private static final String INSERT_INTO_QUERY = "INSERT INTO ";
+    private static final String COUNT_ROWS_QUERY = "SELECT COUNT(*) FROM ";
+
     private static final String TABLE_COLUMNS
             = " (id BIGINT NOT NULL, "
             + "createdAt DATE NOT NULL, "
@@ -267,11 +274,10 @@ public class SQLDatabase {
             + "retweetCount INT NOT NULL, "
             + "hashtags VARCHAR (255) NOT NULL,"
             + "PRIMARY KEY (id)) ";
-    private static final String DELETE_TABLE_QUERY = "Drop TABLE ";
-    private static final String INSERT_INTO_QUERY = "INSERT INTO ";
-    private static final String PST_COLUMNS = " (id, createdAt, screenName, text, "
-            + "editedText, source, geolocation, lang, favoriteCount, "
-            + "retweetCount, hashtags) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+
+    private static final String PST_COLUMNS = " (id, createdAt, screenName,"
+            + " text, editedText, source, geolocation, lang, favoriteCount,"
+            + " retweetCount, hashtags) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
     private String _name;
     private Connector _connector;

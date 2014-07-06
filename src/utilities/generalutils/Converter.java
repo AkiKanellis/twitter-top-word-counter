@@ -7,6 +7,7 @@ package utilities.generalutils;
 
 import java.util.ArrayList;
 import java.util.List;
+import twitter4j.GeoLocation;
 import twitter4j.HashtagEntity;
 
 /**
@@ -27,7 +28,7 @@ public class Converter {
         });
         return wordsArray;
     }
-    
+
     public static String hashtagArrayToString(HashtagEntity[] hashtags) {
         StringBuilder hashtagString = new StringBuilder();
 
@@ -35,5 +36,16 @@ public class Converter {
             hashtagString.append(hashtagEntity.getText()).append(" ");
         }
         return hashtagString.toString().toLowerCase().replaceAll("[^\\p{ASCII}]", "").trim();
+    }
+
+    public static String geolocationToString(GeoLocation geolocation) {
+        if (geolocation == null) {
+            return null;
+        } else {
+            return Double.toString(
+                    geolocation.getLatitude())
+                    + ";"
+                    + Double.toString(geolocation.getLongitude());
+        }
     }
 }
