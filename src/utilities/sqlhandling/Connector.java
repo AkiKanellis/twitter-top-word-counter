@@ -49,7 +49,9 @@ public class Connector {
         }
 
         Printer.println("Connecting to database...");
-        try (Connection con = DriverManager.getConnection(_url, _user._username, _user._password);
+        try (Connection con = DriverManager.getConnection(_url,
+                _user.getUsername(),
+                _user.getPassword());
                 Statement stmt = con.createStatement();) {
 
             Printer.println("Executing query...");
@@ -75,7 +77,9 @@ public class Connector {
         }
 
         Printer.println("Connecting to database...");
-        try (Connection con = DriverManager.getConnection(_url, _user._username, _user._password);) {
+        try (Connection con = DriverManager.getConnection(_url,
+                _user.getUsername(),
+                _user.getPassword());) {
 
             Printer.println("Retrieving databases...");
             try (ResultSet rs = con.getMetaData().getCatalogs();) {
@@ -99,7 +103,9 @@ public class Connector {
         }
 
         Printer.println("Connecting to database...");
-        try (Connection con = DriverManager.getConnection(_url, _user._username, _user._password);
+        try (Connection con = DriverManager.getConnection(_url,
+                _user.getUsername(),
+                _user.getPassword());
                 Statement stmt = con.createStatement();) {
             Printer.println("Creating Database...");
             stmt.executeUpdate(CREATE_DATABASE_QUERY + databaseName);
@@ -117,7 +123,9 @@ public class Connector {
         }
 
         Printer.println("Connecting to database...");
-        try (Connection con = DriverManager.getConnection(_url, _user._username, _user._password);
+        try (Connection con = DriverManager.getConnection(_url,
+                _user.getUsername(),
+                _user.getPassword());
                 Statement stmt = con.createStatement();) {
 
             Printer.println("Deleting Database...");

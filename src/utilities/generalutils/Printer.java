@@ -35,6 +35,7 @@ public class Printer {
         System.err.println(getTime() + ' ' + message);
     }
 
+    // FIXME move these to a separate class
     public static boolean isIn(final String string, List<String> collection) {
         return collection.stream().anyMatch((str) -> (str.equals(string)));
     }

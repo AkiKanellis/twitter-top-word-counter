@@ -8,10 +8,26 @@ public class User {
     }
     
     public User(User user){
-        _username = user._username;
-        _password = user._password;
+        _username = user.getUsername();
+        _password = user.getPassword();
     }
 
-    public String _username;
-    public String _password;
+    public String getUsername() {
+        return _username;
+    }
+
+    public void setUsername(final String username) {
+        _username = username;
+    }
+
+    public String getPassword() {
+        return _password;
+    }
+
+    public void setPassword(final String password) {
+        _password = password;
+    }
+
+    private String _username;
+    private String _password;
 }

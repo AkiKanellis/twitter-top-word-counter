@@ -68,7 +68,6 @@ public class MainGUI extends JFrame {
 
         Printer.println("Gathering available databases...");
         updateDatabaseComboBoxes();
-        System.out.println(DASHES);
     }
 
     /**
@@ -619,6 +618,7 @@ public class MainGUI extends JFrame {
 
     private void updateDatabaseComboBoxes() {
         String[] databases = Converter.listToStringArray(_connector.getDatabases());
+        System.out.println(DASHES);
 
         if (databases.length != 0) {
             jDatabaseLabel.setEnabled(true);
@@ -657,6 +657,7 @@ public class MainGUI extends JFrame {
 
             jTableComboBox.setModel(new DefaultComboBoxModel(Converter.
                     listToStringArray(_currentDatabase.getTables())));
+            System.out.println(DASHES);
 
             if (jTableComboBox.getSelectedItem() != null) {
                 _currentTable = jTableComboBox.getSelectedItem().toString();
@@ -699,6 +700,7 @@ public class MainGUI extends JFrame {
             jAutoInsertCheckbox.setEnabled(true);
             jTweetsInDatabaseLabel.setText(_currentDatabase.getRowsCount(_currentTable)
                     + " tweets currently in the database");
+            System.out.println(DASHES);
             jTopWordsButton.setEnabled(true);
         }
         jWorkingInLabel.setText("Working in: " + databaseName + " / " + tableName);
@@ -750,7 +752,6 @@ public class MainGUI extends JFrame {
             _connector.createDatabase(selectedDatabaseName);
             updateDatabaseComboBoxes();
         }
-        System.out.println(DASHES);
     }//GEN-LAST:event_jCreateDatabaseButtonActionPerformed
 
     private void jDeleteDatabaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDeleteDatabaseButtonActionPerformed
@@ -765,7 +766,6 @@ public class MainGUI extends JFrame {
             _connector.deleteDatabase(selectedDatabaseName);
             updateDatabaseComboBoxes();
         }
-        System.out.println(DASHES);
     }//GEN-LAST:event_jDeleteDatabaseButtonActionPerformed
 
     private void jCreateTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreateTableButtonActionPerformed
@@ -781,7 +781,6 @@ public class MainGUI extends JFrame {
             _currentDatabase.createTable(selectedTableName);
             updateTableComboBoxes();
         }
-        System.out.println(DASHES);
     }//GEN-LAST:event_jCreateTableButtonActionPerformed
 
     private void jRefreshDatabasesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRefreshDatabasesButtonActionPerformed
@@ -804,7 +803,6 @@ public class MainGUI extends JFrame {
             _currentDatabase.createTable(selectedTableName);
             updateTableComboBoxes();
         }
-        System.out.println(DASHES);
     }//GEN-LAST:event_jTableComboBoxActionPerformed
 
     private void jRunXAMPPButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRunXAMPPButtonActionPerformed
@@ -843,7 +841,6 @@ public class MainGUI extends JFrame {
             _currentDatabase.deleteTable(selectedTableName);
             updateTableComboBoxes();
         }
-        System.out.println(DASHES);
     }//GEN-LAST:event_jDeleteTableButtonActionPerformed
 
     private void jDatabaseComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jDatabaseComboBoxActionPerformed
@@ -861,7 +858,6 @@ public class MainGUI extends JFrame {
             _connector.createDatabase(selectedDatabaseName);
             updateDatabaseComboBoxes();
         }
-        System.out.println(DASHES);
     }//GEN-LAST:event_jDatabaseComboBoxActionPerformed
 
     private void jClearButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jClearButtonActionPerformed
@@ -900,11 +896,15 @@ public class MainGUI extends JFrame {
             if (jAutoInsertCheckbox.isSelected()) {
                 Printer.println("Updating database...");
                 _currentDatabase.insert(_tweets, _currentTable);
+                System.out.println(DASHES);
+                
                 _tweets.clear();
                 afterSize = 0;
 
-                jTweetsInDatabaseLabel.setText(_currentDatabase.getRowsCount(_currentTable)
+                jTweetsInDatabaseLabel.setText(
+                        _currentDatabase.getRowsCount(_currentTable)
                         + " tweets currently in the database");
+                System.out.println(DASHES);
             }
             jTweetsInMemoryLabel.setText(afterSize + " tweets currently in memory");
 
@@ -915,7 +915,6 @@ public class MainGUI extends JFrame {
             }
 
             isDone = (System.currentTimeMillis() - startTime >= totalTime);
-            System.out.println(DASHES);
         }
     }//GEN-LAST:event_jDownloadTweetsButtonActionPerformed
 
