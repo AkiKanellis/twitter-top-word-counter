@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package utilities.sqlhandling;
 
 import java.sql.Connection;
@@ -21,14 +16,14 @@ import utilities.tweetshandling.TweetCleaning;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class SQLDatabase {
 
     public SQLDatabase(final String name, final Connector connector) {
         _name = name;
         _connector = connector;
-        _url = connector.getURL() + name + "?characterEncoding=UTF-8";
+        _url = connector.getURL() + name + urlEncoding;
     }
 
     public String getName() {
@@ -255,6 +250,8 @@ public class SQLDatabase {
             return status.getText().replaceAll("[^\\p{ASCII}]", " ");
         }
     }
+    
+    private static final String urlEncoding = "?characterEncoding=UTF-8";
 
     private static final String CREATE_TABLE_QUERY = "Create TABLE ";
     private static final String TABLE_COLUMNS
