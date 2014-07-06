@@ -133,7 +133,19 @@ public class SQLDatabase {
                     pst.setString(3, status.getUser().getScreenName());
                     pst.setString(4, getTweetText(status));
                     pst.setString(5, TweetCleaning.tweetToWords(getTweetText(status)));
-                    pst.setString(6, Converter.hashtagArrayToString(status.getHashtagEntities()));
+                    pst.setString(6, status.getSource().replaceAll("[^\\p{ASCII}]", " "));
+                    if (status.getGeoLocation() != null) {
+                        pst.setString(7, 
+                                Double.toString(status.getGeoLocation().getLatitude())
+                                + ";"
+                                + Double.toString(status.getGeoLocation().getLongitude()));
+                    } else {
+                        pst.setString(7, null);
+                    }
+                    pst.setString(8, status.getLang());
+                    pst.setInt(9, status.getFavoriteCount());
+                    pst.setInt(10, status.getRetweetCount());
+                    pst.setString(11, Converter.hashtagArrayToString(status.getHashtagEntities()));
 
                     pst.executeUpdate();
                     linesNum++;
@@ -249,14 +261,20 @@ public class SQLDatabase {
             = " (id BIGINT NOT NULL, "
             + "createdAt DATE NOT NULL, "
             + "screenName TINYTEXT NOT NULL, "
-            + "fullTweet VARCHAR (255) NOT NULL, "
-            + "editedTweet VARCHAR (255) NOT NULL,"
+            + "text VARCHAR (255) NOT NULL, "
+            + "editedText VARCHAR (255) NOT NULL, "
+            + "source VARCHAR (255) NOT NULL, "
+            + "geolocation VARCHAR (255), "
+            + "lang VARCHAR (255), "
+            + "favoriteCount INT NOT NULL, "
+            + "retweetCount INT NOT NULL, "
             + "hashtags VARCHAR (255) NOT NULL,"
             + "PRIMARY KEY (id)) ";
     private static final String DELETE_TABLE_QUERY = "Drop TABLE ";
     private static final String INSERT_INTO_QUERY = "INSERT INTO ";
-    private static final String PST_COLUMNS = " (id, createdAt, screenName, fullTweet, editedTweet, hashtags) "
-            + "VALUES (?,?,?,?,?,?)";
+    private static final String PST_COLUMNS = " (id, createdAt, screenName, text, "
+            + "editedText, source, geolocation, lang, favoriteCount, "
+            + "retweetCount, hashtags) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
     private String _name;
     private Connector _connector;

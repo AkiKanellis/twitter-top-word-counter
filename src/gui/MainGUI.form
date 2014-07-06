@@ -680,7 +680,6 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection component="Form" name="font" type="property"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="#twitter"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jTownLabel">

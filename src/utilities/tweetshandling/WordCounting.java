@@ -67,6 +67,6 @@ public class WordCounting {
         return htmlTable;
     }
 
-    private static final int _topX = 100;
+    private static final int _topX = 10;
     public static final String DASHES = new String(new char[80]).replace("\0", "-");
 }

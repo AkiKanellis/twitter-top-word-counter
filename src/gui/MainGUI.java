@@ -446,7 +446,6 @@ public class MainGUI extends JFrame {
         jKeywordsLabel.setText("Keywords:");
 
         jKeywordsField.setFont(getFont());
-        jKeywordsField.setText("#twitter");
 
         jTownLabel.setFont(getFont());
         jTownLabel.setLabelFor(jTownField);
@@ -942,7 +941,7 @@ public class MainGUI extends JFrame {
 
     private void jTopWordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTopWordsButtonActionPerformed
         List<String[]> wordsArrays = Converter.stringListToStringWordArray(
-                _currentDatabase.getField("editedTweet", _currentTable));
+                _currentDatabase.getField("editedText", _currentTable));
         List<String[]> hashtagsArrays = Converter.stringListToStringWordArray(
                 _currentDatabase.getField("hashtags", _currentTable));
 
