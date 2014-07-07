@@ -11,5 +11,7 @@ package utilities.generalutils;
  * @author Dimitris
  */
 public class GeneralUtils {
-    
+    public static void main(String[] args) {
+        
+    }
 }
