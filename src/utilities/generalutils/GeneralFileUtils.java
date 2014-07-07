@@ -15,23 +15,19 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  *
- * @author Dimitris
+ * @author Kanellis Dimitris
  */
-public class FileUtils {
+public class GeneralFileUtils {
 
-    private static final int WORD_COUNT = 354;
-
-    public static boolean stopwordsCorrupted(File file) throws IOException, NoSuchAlgorithmException {
+    // FIXME complete stopword file checking
+    public static boolean stopwordsCorrupted(File file) throws IOException,
+            NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         try (InputStream input = new FileInputStream(file)) {
             DigestInputStream dinput = new DigestInputStream(input, md);
         }
         byte[] digest = md.digest();
-        
-        
+
         return true;
     }
-
-    //public static boolean twitterconfCorrupted(File propertiesFile) {
-    //}
 }

@@ -19,7 +19,7 @@ import java.util.Properties;
  *
  * @author Dimitrios
  */
-public class PropertiesUtils {
+public class PropertiesFilesUtils {
 
     public static boolean propertiesErrorFound() {
         File propertiesFile = new File("config.properties");
