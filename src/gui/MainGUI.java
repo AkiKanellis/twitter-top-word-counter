@@ -745,7 +745,7 @@ public class MainGUI extends JFrame {
 
         if (selectedDatabaseName.isEmpty()) {
             return;
-        } else if (Printer.isIn(selectedDatabaseName, _connector.getDatabases())) {
+        } else if (GeneralUtils.isIn(selectedDatabaseName, _connector.getDatabases())) {
             _currentDatabase = new SQLDatabase(jDatabaseComboBox.getSelectedItem().toString(), _connector);
             updateTableComboBoxes();
         } else {
@@ -760,7 +760,7 @@ public class MainGUI extends JFrame {
 
         if (selectedDatabaseName.isEmpty()) {
             return;
-        } else if (!Printer.isIn(selectedDatabaseName, _connector.getDatabases())) {
+        } else if (!GeneralUtils.isIn(selectedDatabaseName, _connector.getDatabases())) {
             return;
         } else {
             _connector.deleteDatabase(selectedDatabaseName);
@@ -774,7 +774,7 @@ public class MainGUI extends JFrame {
 
         if (selectedTableName.isEmpty()) {
             return;
-        } else if (Printer.isIn(selectedTableName, _currentDatabase.getTables())) {
+        } else if (GeneralUtils.isIn(selectedTableName, _currentDatabase.getTables())) {
             _currentTable = selectedTableName;
             updateLabels();
         } else {
@@ -796,7 +796,7 @@ public class MainGUI extends JFrame {
         if (jTableComboBox.getSelectedItem() == null
                 || selectedTableName.isEmpty()) {
             return;
-        } else if (Printer.isIn(selectedTableName, _currentDatabase.getTables())) {
+        } else if (GeneralUtils.isIn(selectedTableName, _currentDatabase.getTables())) {
             _currentTable = selectedTableName;
             updateLabels();
         } else {
@@ -835,7 +835,7 @@ public class MainGUI extends JFrame {
 
         if (selectedTableName.isEmpty()) {
             return;
-        } else if (!Printer.isIn(selectedTableName, _currentDatabase.getTables())) {
+        } else if (!GeneralUtils.isIn(selectedTableName, _currentDatabase.getTables())) {
             return;
         } else {
             _currentDatabase.deleteTable(selectedTableName);
@@ -851,7 +851,7 @@ public class MainGUI extends JFrame {
 
         if (selectedDatabaseName.isEmpty()) {
             return;
-        } else if (Printer.isIn(selectedDatabaseName, _connector.getDatabases())) {
+        } else if (GeneralUtils.isIn(selectedDatabaseName, _connector.getDatabases())) {
             _currentDatabase = new SQLDatabase(selectedDatabaseName, _connector);
             updateTableComboBoxes();
         } else {
@@ -897,7 +897,7 @@ public class MainGUI extends JFrame {
                 Printer.println("Updating database...");
                 _currentDatabase.insert(_tweets, _currentTable);
                 System.out.println(DASHES);
-                
+
                 _tweets.clear();
                 afterSize = 0;
 
@@ -923,7 +923,7 @@ public class MainGUI extends JFrame {
             return;
         }
 
-        if (Printer.datesAreEqual(jSinceDateChooser.getDate(), new Date())) {
+        if (GeneralUtils.datesAreEqual(jSinceDateChooser.getDate(), new Date())) {
             jUntilDateChooser.setDate(jSinceDateChooser.getDate());
             jUntilDateChooser.setEnabled(false);
         } else {
