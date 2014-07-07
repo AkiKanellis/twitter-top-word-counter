@@ -19,7 +19,7 @@ import twitter4j.Query;
 import twitter4j.Status;
 import utilities.consoleredirect.MessageConsole;
 import utilities.generalutils.*;
-import static utilities.generalutils.FileUtils.stopwordsCorrupted;
+import static utilities.generalutils.GeneralFileUtils.stopwordsCorrupted;
 import utilities.sqlhandling.*;
 import utilities.tweetshandling.*;
 
@@ -50,20 +50,20 @@ public class MainGUI extends JFrame {
 
         _tweets = new ArrayList<>();
 
-        if (PropertiesUtils.propertiesErrorFound()) {
+        if (PropertiesFilesUtils.propertiesErrorFound()) {
             Printer.printErrln("Property file \"config.properties\" is "
                     + "missing or corrupted!");
             Printer.println("Resetting properties and creating new file...");
-            PropertiesUtils.setDefaultPropertyFile();
+            PropertiesFilesUtils.setDefaultPropertyFile();
             Printer.printErrln("Please re-enter your credentials in the settings menu!");
         } else {
             Printer.println("Settings were retrieved succesfully");
         }
-        _user = new User(PropertiesUtils.getPropertyValue("username"),
-                PropertiesUtils.getPropertyValue("password"));
+        _user = new User(PropertiesFilesUtils.getPropertyValue("username"),
+                PropertiesFilesUtils.getPropertyValue("password"));
         _connector = new Connector(_user,
-                PropertiesUtils.getPropertyValue("hostname"),
-                Integer.parseInt(PropertiesUtils.getPropertyValue("port")));
+                PropertiesFilesUtils.getPropertyValue("hostname"),
+                Integer.parseInt(PropertiesFilesUtils.getPropertyValue("port")));
         System.out.println(DASHES);
 
         Printer.println("Gathering available databases...");
@@ -724,7 +724,7 @@ public class MainGUI extends JFrame {
             settingPairs.add(new Pair("hostname", settings.getHostname()));
             settingPairs.add(new Pair("port", settings.getPort()));
 
-            PropertiesUtils.updatePropertyFile(settingPairs);
+            PropertiesFilesUtils.updatePropertyFile(settingPairs);
 
             _user = new User(settings.getUsername(), settings.getPassword());
             _connector = new Connector(_user, settings.getHostname(), Integer.parseInt(settings.getPort()));

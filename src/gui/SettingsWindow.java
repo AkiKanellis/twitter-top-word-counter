@@ -7,7 +7,7 @@
 package gui;
 
 import javax.swing.JPanel;
-import utilities.generalutils.PropertiesUtils;
+import utilities.generalutils.PropertiesFilesUtils;
 
 /**
  *
@@ -21,14 +21,14 @@ public class SettingsWindow extends JPanel {
     public SettingsWindow() {
         initComponents();
         
-        if (PropertiesUtils.propertiesErrorFound()) {
-            PropertiesUtils.setDefaultPropertyFile();
+        if (PropertiesFilesUtils.propertiesErrorFound()) {
+            PropertiesFilesUtils.setDefaultPropertyFile();
         }
         
-        jUsernameField.setText(PropertiesUtils.getPropertyValue("username"));
-        jPasswordField.setText(PropertiesUtils.getPropertyValue("password"));
-        jHostnameField.setText(PropertiesUtils.getPropertyValue("hostname"));
-        jPortField.setText(PropertiesUtils.getPropertyValue("port"));
+        jUsernameField.setText(PropertiesFilesUtils.getPropertyValue("username"));
+        jPasswordField.setText(PropertiesFilesUtils.getPropertyValue("password"));
+        jHostnameField.setText(PropertiesFilesUtils.getPropertyValue("hostname"));
+        jPortField.setText(PropertiesFilesUtils.getPropertyValue("port"));
     }
 
     /**
@@ -201,6 +201,8 @@ public class SettingsWindow extends JPanel {
     public String getPort(){
         return jPortField.getText().trim();
     }
+    
+    // FIXME remove these two
     
     private void jUsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUsernameFieldActionPerformed
         // TODO add your handling code here:
