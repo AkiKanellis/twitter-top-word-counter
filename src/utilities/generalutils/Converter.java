@@ -7,6 +7,7 @@ package utilities.generalutils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import twitter4j.GeoLocation;
 import twitter4j.HashtagEntity;
 
@@ -47,5 +48,20 @@ public class Converter {
                     + ";"
                     + Double.toString(geolocation.getLongitude());
         }
+    }
+
+    public static void listMaptoHtmlTable(List<Map.Entry<String, Long>> topEntries) {
+        String html = "<table>";
+        int counter = 1;
+        for (Map.Entry<String, Long> entry : topEntries) {
+            html += "\n<tr>"
+                    + "\n<td>" + counter++ + "</td>"
+                    + "\n<td>" + ": " + "</td>"
+                    + "\n<td>" + entry.getKey() + "</td>"
+                    + "\n<td>" + " - " + "</td>"
+                    + "\n<td>" + entry.getValue() + "</td>"
+                    + "\n</tr>";
+        }
+        html += "\n</table>";
     }
 }
