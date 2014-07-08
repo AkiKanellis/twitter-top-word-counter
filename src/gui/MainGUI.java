@@ -25,7 +25,7 @@ import utilities.tweetshandling.*;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class MainGUI extends JFrame {
 
@@ -37,12 +37,15 @@ public class MainGUI extends JFrame {
         try {
             stopwordsCorrupted(new File("stopwords.txt"));
         } catch (IOException ex) {
-            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null,
+                    ex);
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null,
+                    ex);
         }
 
-        jMessageConsoleTextPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+        jMessageConsoleTextPane.putClientProperty(
+                JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
         _mc = new MessageConsole(jMessageConsoleTextPane, true);
         _mc.redirectOut(null, null);
         _mc.redirectErr(Color.RED, null);
@@ -83,7 +86,7 @@ public class MainGUI extends JFrame {
         jMessageConsoleTextPane = new javax.swing.JTextPane();
         jButtonsPane = new javax.swing.JPanel();
         jSettingsButton = new javax.swing.JButton();
-        jGetSQLVersionButton = new javax.swing.JButton();
+        jCheckServerButton = new javax.swing.JButton();
         jRunXAMPPButton = new javax.swing.JButton();
         jClearButton = new javax.swing.JButton();
         jSQLPanel = new javax.swing.JPanel();
@@ -141,11 +144,11 @@ public class MainGUI extends JFrame {
             }
         });
 
-        jGetSQLVersionButton.setFont(getFont());
-        jGetSQLVersionButton.setText("SQL version");
-        jGetSQLVersionButton.addActionListener(new java.awt.event.ActionListener() {
+        jCheckServerButton.setFont(getFont());
+        jCheckServerButton.setText("<html>Check<br/>Server</html>");
+        jCheckServerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jGetSQLVersionButtonActionPerformed(evt);
+                jCheckServerButtonActionPerformed(evt);
             }
         });
 
@@ -172,22 +175,21 @@ public class MainGUI extends JFrame {
             .addGroup(jButtonsPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jButtonsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRunXAMPPButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                    .addComponent(jGetSQLVersionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jRunXAMPPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSettingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jClearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jClearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCheckServerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jButtonsPaneLayout.setVerticalGroup(
             jButtonsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jButtonsPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSettingsButton)
-                .addGap(37, 37, 37)
+                .addComponent(jCheckServerButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
                 .addComponent(jRunXAMPPButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jGetSQLVersionButton)
-                .addGap(43, 43, 43)
+                .addComponent(jSettingsButton)
+                .addGap(51, 51, 51)
                 .addComponent(jClearButton)
                 .addContainerGap())
         );
@@ -617,7 +619,8 @@ public class MainGUI extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateDatabaseComboBoxes() {
-        String[] databases = Converter.listToStringArray(_connector.getDatabases());
+        String[] databases = Converter.listToStringArray(
+                _connector.getDatabases());
         System.out.println(DASHES);
 
         if (databases.length != 0) {
@@ -628,8 +631,8 @@ public class MainGUI extends JFrame {
 
             jDatabaseComboBox.setModel(new DefaultComboBoxModel(databases));
 
-            _currentDatabase = new SQLDatabase(jDatabaseComboBox.getSelectedItem().toString(),
-                    _connector);
+            _currentDatabase = new SQLDatabase(
+                    jDatabaseComboBox.getSelectedItem().toString(), _connector);
         } else {
             jDatabaseLabel.setEnabled(false);
             jDatabaseComboBox.setEnabled(false);
@@ -663,6 +666,7 @@ public class MainGUI extends JFrame {
                 _currentTable = jTableComboBox.getSelectedItem().toString();
             } else {
                 _currentTable = null;
+                jDeleteTableButton.setEnabled(false);
             }
         } else {
             jTableLabel.setEnabled(false);
@@ -698,7 +702,8 @@ public class MainGUI extends JFrame {
             databaseName = _currentDatabase.getName();
             tableName = _currentTable;
             jAutoInsertCheckbox.setEnabled(true);
-            jTweetsInDatabaseLabel.setText(_currentDatabase.getRowsCount(_currentTable)
+            jTweetsInDatabaseLabel.setText(
+                    _currentDatabase.getRowsCount(_currentTable)
                     + " tweets currently in the database");
             jTopWordsButton.setEnabled(true);
         }
@@ -726,26 +731,30 @@ public class MainGUI extends JFrame {
             PropertiesFilesUtils.updatePropertyFile(settingPairs);
 
             _user = new User(settings.getUsername(), settings.getPassword());
-            _connector = new Connector(_user, settings.getHostname(), Integer.parseInt(settings.getPort()));
+            _connector = new Connector(_user, settings.getHostname(),
+                    Integer.parseInt(settings.getPort()));
         }
     }//GEN-LAST:event_jSettingsButtonActionPerformed
 
-    private void jGetSQLVersionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGetSQLVersionButtonActionPerformed
+    private void jCheckServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckServerButtonActionPerformed
         String version = _connector.checkConnection();
         if (!version.trim().isEmpty()) {
-            System.out.println(version);
+            Printer.println("Connection to the server was successful!"
+                    + " Server version is: " + version);
         }
         System.out.println(DASHES);
-    }//GEN-LAST:event_jGetSQLVersionButtonActionPerformed
+    }//GEN-LAST:event_jCheckServerButtonActionPerformed
 
     private void jCreateDatabaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreateDatabaseButtonActionPerformed
-        final String selectedDatabaseName = jDatabaseComboBox.getSelectedItem().
-                toString().trim();
+        final String selectedDatabaseName
+                = jDatabaseComboBox.getSelectedItem().toString().trim();
 
         if (selectedDatabaseName.isEmpty()) {
             return;
-        } else if (GeneralUtils.isIn(selectedDatabaseName, _connector.getDatabases())) {
-            _currentDatabase = new SQLDatabase(jDatabaseComboBox.getSelectedItem().toString(), _connector);
+        } else if (GeneralUtils.isIn(selectedDatabaseName,
+                _connector.getDatabases())) {
+            _currentDatabase = new SQLDatabase(
+                    jDatabaseComboBox.getSelectedItem().toString(), _connector);
             updateTableComboBoxes();
         } else {
             _connector.createDatabase(selectedDatabaseName);
@@ -754,8 +763,8 @@ public class MainGUI extends JFrame {
     }//GEN-LAST:event_jCreateDatabaseButtonActionPerformed
 
     private void jDeleteDatabaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDeleteDatabaseButtonActionPerformed
-        final String selectedDatabaseName = jDatabaseComboBox.getSelectedItem().
-                toString().trim();
+        final String selectedDatabaseName
+                = jDatabaseComboBox.getSelectedItem().toString().trim();
 
         if (selectedDatabaseName.isEmpty()) {
             return;
@@ -768,12 +777,13 @@ public class MainGUI extends JFrame {
     }//GEN-LAST:event_jDeleteDatabaseButtonActionPerformed
 
     private void jCreateTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreateTableButtonActionPerformed
-        final String selectedTableName = jTableComboBox.getSelectedItem().
-                toString().trim();
+        final String selectedTableName
+                = jTableComboBox.getSelectedItem().toString().trim();
 
         if (selectedTableName.isEmpty()) {
             return;
-        } else if (GeneralUtils.isIn(selectedTableName, _currentDatabase.getTables())) {
+        } else if (GeneralUtils.isIn(selectedTableName,
+                _currentDatabase.getTables())) {
             _currentTable = selectedTableName;
             updateLabels();
         } else {
@@ -788,15 +798,17 @@ public class MainGUI extends JFrame {
     }//GEN-LAST:event_jRefreshDatabasesButtonActionPerformed
 
     private void jTableComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTableComboBoxActionPerformed
-        final String selectedTableName = jTableComboBox.getSelectedItem().
-                toString().trim();
+        final String selectedTableName
+                = jTableComboBox.getSelectedItem().toString().trim();
 
         if (jTableComboBox.getSelectedItem() == null
                 || selectedTableName.isEmpty()) {
-            return;
-        } else if (GeneralUtils.isIn(selectedTableName, _currentDatabase.getTables())) {
+            updateTableComboBoxes();
+        } else if (GeneralUtils.isIn(selectedTableName,
+                _currentDatabase.getTables())) {
             _currentTable = selectedTableName;
             updateLabels();
+            System.out.println(DASHES);
         } else {
             _currentDatabase.createTable(selectedTableName);
             updateTableComboBoxes();
@@ -827,13 +839,13 @@ public class MainGUI extends JFrame {
 
     private void jDeleteTableButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jDeleteTableButtonActionPerformed
     {//GEN-HEADEREND:event_jDeleteTableButtonActionPerformed
-        final String selectedTableName = jTableComboBox.getSelectedItem()
-                .toString()
-                .trim();
+        final String selectedTableName
+                = jTableComboBox.getSelectedItem().toString().trim();
 
         if (selectedTableName.isEmpty()) {
             return;
-        } else if (!GeneralUtils.isIn(selectedTableName, _currentDatabase.getTables())) {
+        } else if (!GeneralUtils.isIn(selectedTableName,
+                _currentDatabase.getTables())) {
             return;
         } else {
             _currentDatabase.deleteTable(selectedTableName);
@@ -843,13 +855,13 @@ public class MainGUI extends JFrame {
 
     private void jDatabaseComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jDatabaseComboBoxActionPerformed
     {//GEN-HEADEREND:event_jDatabaseComboBoxActionPerformed
-        final String selectedDatabaseName = jDatabaseComboBox.getSelectedItem()
-                .toString()
-                .trim();
+        final String selectedDatabaseName
+                = jDatabaseComboBox.getSelectedItem().toString().trim();
 
         if (selectedDatabaseName.isEmpty()) {
-            return;
-        } else if (GeneralUtils.isIn(selectedDatabaseName, _connector.getDatabases())) {
+            updateDatabaseComboBoxes();
+        } else if (GeneralUtils.isIn(selectedDatabaseName,
+                _connector.getDatabases())) {
             _currentDatabase = new SQLDatabase(selectedDatabaseName, _connector);
             updateTableComboBoxes();
         } else {
@@ -887,14 +899,15 @@ public class MainGUI extends JFrame {
         while (!isDone) {
             final int previousSize = _tweets.size();
             _tweets.addAll(TwitterTools.search(query));
-            TwitterTools.filterTweetsBasedOnCity(_tweets, jTownField.getText().trim());
+            TwitterTools.filterTweetsBasedOnCity(_tweets,
+                    jTownField.getText().trim());
             int afterSize = _tweets.size();
-            Printer.println(afterSize - previousSize + " tweets were downloaded.");
+            Printer.println(afterSize - previousSize
+                    + " tweets were downloaded.");
 
             if (jAutoInsertCheckbox.isSelected()) {
                 Printer.println("Updating database...");
                 _currentDatabase.insert(_tweets, _currentTable);
-                System.out.println(DASHES);
 
                 _tweets.clear();
                 afterSize = 0;
@@ -902,9 +915,11 @@ public class MainGUI extends JFrame {
                 jTweetsInDatabaseLabel.setText(
                         _currentDatabase.getRowsCount(_currentTable)
                         + " tweets currently in the database");
-                System.out.println(DASHES);
             }
-            jTweetsInMemoryLabel.setText(afterSize + " tweets currently in memory");
+            System.out.println(DASHES);
+
+            jTweetsInMemoryLabel.setText(afterSize
+                    + " tweets currently in memory");
 
             try {
                 Thread.sleep(timeout);
@@ -921,7 +936,8 @@ public class MainGUI extends JFrame {
             return;
         }
 
-        if (GeneralUtils.datesAreEqual(jSinceDateChooser.getDate(), new Date())) {
+        if (GeneralUtils.datesAreEqual(jSinceDateChooser.getDate(),
+                new Date())) {
             jUntilDateChooser.setDate(jSinceDateChooser.getDate());
             jUntilDateChooser.setEnabled(false);
         } else {
@@ -942,7 +958,8 @@ public class MainGUI extends JFrame {
         List<String[]> hashtagsArrays = Converter.stringListToStringWordArray(
                 _currentDatabase.getField("hashtags", _currentTable));
 
-        String htmlTable = WordCounting.getHtmlTable(wordsArrays, hashtagsArrays);
+        String htmlTable = WordCounting.getHtmlTable(wordsArrays,
+                hashtagsArrays);
         jMessageConsoleTextPane.setText(htmlTable);
     }//GEN-LAST:event_jTopWordsButtonActionPerformed
 
@@ -1018,6 +1035,8 @@ public class MainGUI extends JFrame {
         });
     }
 
+    private static final String DASHES = new String(new char[80]).replace("\0", "-");
+    
     private User _user;
     private Connector _connector;
     private SQLDatabase _currentDatabase;
@@ -1027,11 +1046,10 @@ public class MainGUI extends JFrame {
 
     private final MessageConsole _mc;
 
-    public static final String DASHES = new String(new char[80]).replace("\0", "-");
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jAutoInsertCheckbox;
     private javax.swing.JPanel jButtonsPane;
+    private javax.swing.JButton jCheckServerButton;
     private javax.swing.JButton jClearButton;
     private javax.swing.JButton jCreateDatabaseButton;
     private javax.swing.JButton jCreateTableButton;
@@ -1041,7 +1059,6 @@ public class MainGUI extends JFrame {
     private javax.swing.JButton jDeleteDatabaseButton;
     private javax.swing.JButton jDeleteTableButton;
     private javax.swing.JButton jDownloadTweetsButton;
-    private javax.swing.JButton jGetSQLVersionButton;
     private javax.swing.JSpinner jHoursSpinner;
     private javax.swing.JTextField jKeywordsField;
     private javax.swing.JLabel jKeywordsLabel;
