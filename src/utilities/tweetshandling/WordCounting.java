@@ -29,8 +29,12 @@ public class WordCounting {
 
         htmlTable += "<table>"
                 + "<tr>"
-                + "<td>" + listToHtmlTable(topWords, "Words used most") + "</td>"
-                + "<td>" + listToHtmlTable(topHashtags, "Hashtags used most") + "</td>"
+                + "<td>"
+                + listToHtmlTable(topWords, "Words used most")
+                + "</td>"
+                + "<td>"
+                + listToHtmlTable(topHashtags, "Hashtags used most")
+                + "</td>"
                 + "</tr>"
                 + "</table>\n"
                 + "&nbsp;"
@@ -39,12 +43,17 @@ public class WordCounting {
         return htmlTable;
     }
 
-    private static Stream<Map.Entry<String, Long>> getTopWords(final int topX, final Stream<String> words) {
+    private static Stream<Map.Entry<String, Long>> getTopWords(final int topX,
+            final Stream<String> words) {
+
         if (topX < 1) {
-            throw new IllegalArgumentException("Invalid value for topX: " + topX);
+            throw new IllegalArgumentException("Invalid value for topX: "
+                    + topX);
         }
         Objects.requireNonNull(words);
-        Comparator<Map.Entry<String, Long>> comparator = Comparator.comparingLong(Map.Entry::getValue);
+        Comparator<Map.Entry<String, Long>> comparator
+                = Comparator.comparingLong(Map.Entry::getValue);
+
         return words
                 .filter(str -> !str.isEmpty())
                 .collect(Collectors.groupingBy(i -> i, Collectors.counting()))
@@ -53,7 +62,9 @@ public class WordCounting {
                 .limit(topX);
     }
 
-    private static String listToHtmlTable(List<Map.Entry<String, Long>> topEntries, final String title) {
+    private static String listToHtmlTable(
+            List<Map.Entry<String, Long>> topEntries, final String title) {
+
         String htmlTable = "<table style=\"border:1px dashed black;\">"
                 + "<th colspan=\"3\">" + title + "</th>";
         int counter = 1;
