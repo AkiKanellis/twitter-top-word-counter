@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class Connector {
 
@@ -39,8 +39,8 @@ public class Connector {
         return DRIVER;
     }
 
-    public String getVersion() {
-        Printer.println("Getting driver...");
+    public String checkConnection() {
+        Printer.println(GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
@@ -48,19 +48,20 @@ public class Connector {
             return VERSION_NOT_FOUND;
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _user.getUsername(),
                 _user.getPassword());
                 Statement stmt = con.createStatement();) {
 
-            Printer.println("Executing query...");
+            Printer.println("Getting server version...");
             try (ResultSet rs = stmt.executeQuery(VERSION_QUERY);) {
                 rs.next();
                 return rs.getString(1);
             }
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error: " + se.getErrorCode() + ' ' + se.getMessage());
+            Printer.printErrln("SQL Error: " + se.getErrorCode() + " "
+                    + se.getMessage());
             return VERSION_NOT_FOUND;
         }
     }
@@ -68,7 +69,7 @@ public class Connector {
     public List<String> getDatabases() {
         List<String> databases = new ArrayList<>();
 
-        Printer.println("Getting driver...");
+        Printer.println(GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
@@ -76,7 +77,7 @@ public class Connector {
             return databases;
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _user.getUsername(),
                 _user.getPassword());) {
@@ -89,20 +90,21 @@ public class Connector {
                 return databases;
             }
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error: " + se.getErrorCode() + " " + se.getMessage());
+            Printer.printErrln("SQL Error: " + se.getErrorCode() + " "
+                    + se.getMessage());
             return databases;
         }
     }
 
     public void createDatabase(final String databaseName) {
-        Printer.println("Getting driver...");
+        Printer.println(GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             Printer.printErrln("Driver Error: " + e.getMessage());
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _user.getUsername(),
                 _user.getPassword());
@@ -110,19 +112,20 @@ public class Connector {
             Printer.println("Creating Database...");
             stmt.executeUpdate(CREATE_DATABASE_QUERY + databaseName);
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error " + se.getErrorCode() + ' ' + se.getMessage());
+            Printer.printErrln("SQL Error " + se.getErrorCode() + " "
+                    + se.getMessage());
         }
     }
 
     public void deleteDatabase(final String databaseName) {
-        Printer.println("Getting driver...");
+        Printer.println(GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             Printer.printErrln("Driver Error: " + e.getMessage());
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _user.getUsername(),
                 _user.getPassword());
@@ -131,19 +134,24 @@ public class Connector {
             Printer.println("Deleting Database...");
             stmt.executeUpdate(DELETE_DATABASE_QUERY + databaseName);
         } catch (SQLException se) {
-            Printer.printErrln("SQL Error " + se.getErrorCode() + ' ' + se.getMessage());
+            Printer.printErrln("SQL Error " + se.getErrorCode() + " "
+                    + se.getMessage());
         }
     }
+    
+    public static final String GETTING_DRIVER_MESSAGE = "Getting driver...";
+    public static final String CONNECTING_MESSAGE = "Connecting to server...";
 
     private static final String VERSION_QUERY = "Select VERSION()";
     private static final String CREATE_DATABASE_QUERY = "Create DATABASE ";
     private static final String DELETE_DATABASE_QUERY = "Drop DATABASE ";
 
     private static final String VERSION_NOT_FOUND = "";
+    
+    private static final String DRIVER = "com.mysql.jdbc.Driver";
 
-    private User _user;
-    public int _port;
-    public String _host;
-    private final String DRIVER = "com.mysql.jdbc.Driver";
-    private String _url;
+    private final User _user;
+    private final String _host;
+    private final int _port;
+    private final String _url;
 }

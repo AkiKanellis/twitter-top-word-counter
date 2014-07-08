@@ -731,7 +731,7 @@ public class MainGUI extends JFrame {
     }//GEN-LAST:event_jSettingsButtonActionPerformed
 
     private void jGetSQLVersionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGetSQLVersionButtonActionPerformed
-        String version = _connector.getVersion();
+        String version = _connector.checkConnection();
         if (!version.trim().isEmpty()) {
             System.out.println(version);
         }
