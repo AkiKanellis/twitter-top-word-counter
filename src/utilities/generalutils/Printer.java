@@ -10,26 +10,26 @@ import java.util.Date;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class Printer {
 
     public static void print(String message) {
         message = message.replaceAll("\n+", ". ");
-        System.out.print(getFormattedTime() + ' ' + message);
+        System.out.print(getFormattedTime() + " " + message);
     }
 
     public static void println(String message) {
         message = message.replaceAll("\n+", ". ");
-        System.out.println(getFormattedTime() + ' ' + message);
+        System.out.println(getFormattedTime() + " " + message);
     }
 
     public static void printErrln(String message) {
         message = message.replaceAll("\n+", ". ");
-        System.err.println(getFormattedTime() + ' ' + message);
+        System.err.println(getFormattedTime() + " " + message);
     }
 
     private static String getFormattedTime() {
-        return '[' + new SimpleDateFormat("HH:mm:ss").format(new Date()) + ']';
+        return "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]";
     }
 }
