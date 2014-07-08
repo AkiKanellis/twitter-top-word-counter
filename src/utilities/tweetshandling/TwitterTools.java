@@ -21,7 +21,7 @@ import utilities.generalutils.Printer;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class TwitterTools {
 
@@ -35,48 +35,47 @@ public class TwitterTools {
                 result = twitter.search(query);
                 tweets.addAll(result.getTweets());
             } while ((query = result.nextQuery()) != null);
+            return tweets;
         } catch (TwitterException te) {
             Printer.printErrln("Failed to search tweets: " + te.getMessage());
             if (te.getStatusCode() == 503) {
                 Printer.printErrln("Please retry after: "
                         + te.getRetryAfter() + " seconds");
             }
-        } catch (Exception e) {
-            Printer.printErrln(e.getMessage());
-        } finally {
             return tweets;
         }
     }
 
-    public static void filterTweetsBasedOnCity(List<Status> tweets, final String city) {
+    public static void filterTweetsBasedOnCity(final List<Status> tweets,
+            final String city) {
+
         if (city.isEmpty()) {
             return;
         }
 
-        // Using iterators to be able to modify the list
         _it = tweets.iterator();
-        try {
-            while (_it.hasNext()) {
-                _status = (Status) _it.next();
-                if ((_status.getPlace() == null || !_status.getPlace().getName().equalsIgnoreCase(city))
-                        && (_status.getUser().getLocation() == null || !_status.getUser().getLocation().equalsIgnoreCase(city))) {
-                    _it.remove();
-                }
-            }
-        } catch (NullPointerException ne) {
-            System.err.println(ne.getMessage());
-        }
+        while (_it.hasNext()) {
+            _status = (Status) _it.next();
 
+            if ((_status.getPlace() == null
+                    || !_status.getPlace().getName().equalsIgnoreCase(city))
+                    && (_status.getUser().getLocation() == null
+                    || !_status.getUser().getLocation().equalsIgnoreCase(city))) {
+                _it.remove();
+            }
+        }
     }
 
     public static Query queryMaker(final String keywords, final Date since,
             final Date until, final int count) {
+        
         Query query;
         if (keywords.isEmpty()) {
             query = new Query("a");
         } else {
             query = new Query(keywords);
         }
+        
         query.setCount(count);
         query.setLang("en");
         query.setResultType(Query.ResultType.recent);
