@@ -30,15 +30,10 @@ public class SQLDatabase {
         return _name;
     }
 
-    public void setName(final String newName) {
-        _name = newName;
-        _url = _connector.getURL() + newName;
-    }
-
     public List<String> getTables() {
-        List<String> tables = new ArrayList<>();
+        final List<String> tables = new ArrayList<>();
 
-        Printer.println("Getting driver...");
+        Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(_connector.getDriver());
         } catch (ClassNotFoundException e) {
@@ -46,7 +41,7 @@ public class SQLDatabase {
             return tables;
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(Connector.CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _connector.getUser().getUsername(),
                 _connector.getUser().getPassword());) {
@@ -68,14 +63,14 @@ public class SQLDatabase {
     }
 
     public void createTable(final String tableName) {
-        Printer.println("Getting driver...");
+        Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(_connector.getDriver());
         } catch (ClassNotFoundException e) {
             Printer.printErrln("Driver Error: " + e.getMessage());
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(Connector.CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _connector.getUser().getUsername(),
                 _connector.getUser().getPassword());
@@ -90,14 +85,14 @@ public class SQLDatabase {
     }
 
     public void deleteTable(final String tableName) {
-        Printer.println("Getting driver...");
+        Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(_connector.getDriver());
         } catch (ClassNotFoundException e) {
             Printer.printErrln("Driver Error: " + e.getMessage());
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(Connector.CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _connector.getUser().getUsername(),
                 _connector.getUser().getPassword());
@@ -111,15 +106,15 @@ public class SQLDatabase {
         }
     }
 
-    public void insert(List<Status> statuses, final String tableName) {
-        Printer.println("Getting driver...");
+    public void insert(final List<Status> statuses, final String tableName) {
+        Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(_connector.getDriver());
         } catch (ClassNotFoundException e) {
             Printer.printErrln("Driver Error: " + e.getMessage());
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(Connector.CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _connector.getUser().getUsername(),
                 _connector.getUser().getPassword());
@@ -186,10 +181,10 @@ public class SQLDatabase {
     }
 
     public List<String> getField(final String field, final String tableName) {
-        List<String> editedText = new ArrayList<>();
+        final List<String> editedText = new ArrayList<>();
         final String query = "SELECT " + field + " FROM " + tableName;
 
-        Printer.println("Getting driver...");
+        Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
             Class.forName(_connector.getDriver());
         } catch (ClassNotFoundException e) {
@@ -197,7 +192,7 @@ public class SQLDatabase {
             return editedText;
         }
 
-        Printer.println("Connecting to database...");
+        Printer.println(Connector.CONNECTING_MESSAGE);
         try (Connection con = DriverManager.getConnection(_url,
                 _connector.getUser().getUsername(),
                 _connector.getUser().getPassword());
@@ -255,7 +250,7 @@ public class SQLDatabase {
         }
     }
 
-    private static String getTweetText(Status status) {
+    private static String getTweetText(final Status status) {
         if (status.isRetweet()) {
             return status
                     .getRetweetedStatus()
@@ -306,7 +301,6 @@ public class SQLDatabase {
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     private String _name;
-    private Connector _connector;
+    private final Connector _connector;
     private String _url;
-    private Status test;
 }
