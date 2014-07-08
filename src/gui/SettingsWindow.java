@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package gui;
 
 import javax.swing.JPanel;
@@ -11,7 +10,7 @@ import utilities.generalutils.PropertiesFilesUtils;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class SettingsWindow extends JPanel {
 
@@ -20,11 +19,11 @@ public class SettingsWindow extends JPanel {
      */
     public SettingsWindow() {
         initComponents();
-        
+
         if (PropertiesFilesUtils.propertiesErrorFound()) {
             PropertiesFilesUtils.setDefaultPropertyFile();
         }
-        
+
         jUsernameField.setText(PropertiesFilesUtils.getPropertyValue("username"));
         jPasswordField.setText(PropertiesFilesUtils.getPropertyValue("password"));
         jHostnameField.setText(PropertiesFilesUtils.getPropertyValue("hostname"));
@@ -116,17 +115,6 @@ public class SettingsWindow extends JPanel {
         jPasswordLabel.setText("Password:");
 
         jUsernameField.setText("root");
-        jUsernameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jUsernameFieldActionPerformed(evt);
-            }
-        });
-
-        jPasswordField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordFieldActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jUserCredentialsPanelLayout = new javax.swing.GroupLayout(jUserCredentialsPanel);
         jUserCredentialsPanel.setLayout(jUserCredentialsPanelLayout);
@@ -186,31 +174,21 @@ public class SettingsWindow extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public String getUsername(){
+    public String getUsername() {
         return jUsernameField.getText().trim();
     }
-    
-    public String getPassword(){
+
+    public String getPassword() {
         return jPasswordField.getText().trim();
     }
-    
-    public String getHostname(){
+
+    public String getHostname() {
         return jHostnameField.getText().trim();
     }
-    
-    public String getPort(){
+
+    public String getPort() {
         return jPortField.getText().trim();
     }
-    
-    // FIXME remove these two
-    
-    private void jUsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUsernameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jUsernameFieldActionPerformed
-
-    private void jPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
