@@ -7,7 +7,7 @@ package utilities.generalutils;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class Pair<L, R> {
 
