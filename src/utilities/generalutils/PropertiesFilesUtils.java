@@ -17,25 +17,22 @@ import java.util.Properties;
 
 /**
  *
- * @author Dimitrios
+ * @author Kanellis Dimitris
  */
 public class PropertiesFilesUtils {
 
     public static boolean propertiesErrorFound() {
         File propertiesFile = new File("config.properties");
-        return !propertiesFile.exists() || propertiesCorrupted(propertiesFile);
+        return !propertiesFile.exists() || propertiesFileCorrupted(propertiesFile);
     }
 
-    private static boolean propertiesCorrupted(File propertiesFile) {
-        Properties prop = new Properties();
-        InputStream input = null;
+    private static boolean propertiesFileCorrupted(File propertiesFile) {
         boolean corrupted = false;
-        List<String> properties = Arrays.asList("username", "password", "hostname",
-                "port");
 
-        try {
-            input = new FileInputStream(propertiesFile);
-
+        try (InputStream input = new FileInputStream(propertiesFile);) {
+            Properties prop = new Properties();
+            List<String> properties = Arrays.asList("username", "password",
+                    "hostname", "port");
             prop.load(input);
 
             for (String property : properties) {
@@ -44,77 +41,40 @@ public class PropertiesFilesUtils {
                     break;
                 }
             }
-
+            return corrupted;
         } catch (IOException ex) {
             Printer.printErrln("IO Error: " + ex.getMessage());
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException io) {
-                System.out.println("IO Error: " + io.getMessage());
-            }
             return corrupted;
         }
     }
 
     public static void setDefaultPropertyFile() {
-        Properties prop = new Properties();
-        OutputStream output = null;
-        InputStream input = null;
-
-        try {
+        try (OutputStream output = new FileOutputStream("config.properties");) {
+            Properties prop = new Properties();
             prop.setProperty("username", "root");
             prop.setProperty("password", "");
             prop.setProperty("hostname", "localhost");
             prop.setProperty("port", "3306");
 
-            output = new FileOutputStream("config.properties");
             prop.store(output, null);
-
         } catch (IOException io) {
             System.out.println("IO Error: " + io.getMessage());
-        } finally {
-            try {
-                if (output != null) {
-                    output.close();
-                }
-            } catch (IOException io) {
-                System.out.println("IO Error: " + io.getMessage());
-            }
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException io) {
-                System.out.println("IO Error: " + io.getMessage());
-            }
         }
     }
 
     public static String getPropertyValue(final String key) {
-        Properties prop = new Properties();
-        InputStream input = null;
         String value = null;
 
-        try {
-            input = new FileInputStream("config.properties");            
+        try (InputStream input = new FileInputStream("config.properties");) {
+            Properties prop = new Properties();
             prop.load(input);
+            
             value = prop.getProperty(key);
-
+            return value;
         } catch (IOException ex) {
             Printer.printErrln("IO Error: " + ex.getMessage());
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                }
-            }
             return value;
         }
-
     }
 
     public static void updatePropertyFile(final Pair<String, String> pair) {
