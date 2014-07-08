@@ -15,7 +15,9 @@ import java.util.stream.Stream;
 
 public class WordCounting {
 
-    public static String getHtmlTable(final List<String[]> words, final List<String[]> hashtags) {
+    public static String getHtmlTable(final List<String[]> words,
+            final List<String[]> hashtags) {
+
         String htmlTable = "<html>"
                 + "<body>";
         List<Map.Entry<String, Long>> topWords = getTopWords(_topX,
@@ -37,7 +39,7 @@ public class WordCounting {
         return htmlTable;
     }
 
-    public static Stream<Map.Entry<String, Long>> getTopWords(final int topX, final Stream<String> words) {
+    private static Stream<Map.Entry<String, Long>> getTopWords(final int topX, final Stream<String> words) {
         if (topX < 1) {
             throw new IllegalArgumentException("Invalid value for topX: " + topX);
         }
@@ -51,7 +53,7 @@ public class WordCounting {
                 .limit(topX);
     }
 
-    public static String listToHtmlTable(List<Map.Entry<String, Long>> topEntries, final String title) {
+    private static String listToHtmlTable(List<Map.Entry<String, Long>> topEntries, final String title) {
         String htmlTable = "<table style=\"border:1px dashed black;\">"
                 + "<th colspan=\"3\">" + title + "</th>";
         int counter = 1;
@@ -68,5 +70,4 @@ public class WordCounting {
     }
 
     private static final int _topX = 10;
-    public static final String DASHES = new String(new char[80]).replace("\0", "-");
 }
