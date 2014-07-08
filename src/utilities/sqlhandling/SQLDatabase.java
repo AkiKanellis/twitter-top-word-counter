@@ -206,7 +206,6 @@ public class SQLDatabase {
         int rowsCount = -1;
         final String query = COUNT_ROWS_QUERY + tableName;
 
-        Printer.println("Getting driver...");
         try {
             Class.forName(_connector.getDriver());
         } catch (ClassNotFoundException e) {
@@ -214,14 +213,12 @@ public class SQLDatabase {
             return rowsCount;
         }
 
-        Printer.println("Connecting to database...");
         try (Connection con = DriverManager.getConnection(_url,
                 _connector.getUser().getUsername(),
                 _connector.getUser().getPassword());
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery(query);) {
 
-            Printer.println("Getting number of rows...");
             rs.next();
             rowsCount = rs.getInt(1);
             return rowsCount;
