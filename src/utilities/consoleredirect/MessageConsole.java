@@ -1,29 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package utilities.consoleredirect;
 
-/**
- *
- * @author Dimitrios
- */
 import java.io.*;
 import java.awt.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 
-/*
- *  Create a simple console to display text messages.
+/**
+ * Create a simple console to display text messages.
  *
- *  Messages can be directed here from different sources. Each source can
- *  have its messages displayed in a different color.
+ * Messages can be directed here from different sources. Each source can have
+ * its messages displayed in a different color.
  *
- *  Messages can either be appended to the console or inserted as the first
- *  line of the console
+ * Messages can either be appended to the console or inserted as the first line
+ * of the console
  *
- *  You can limit the number of lines to hold in the Document.
+ * You can limit the number of lines to hold in the Document.
  */
 public class MessageConsole {
 
@@ -33,12 +24,12 @@ public class MessageConsole {
     private DocumentListener _limitLinesListener;
     public int hello;
 
-    /*
-     *	Use the text component specified as a simply console to display
-     *  text messages.
+    /**
+     * Use the text component specified as a simply console to display text
+     * messages.
      *
-     *  The messages can either be appended to the end of the console or
-     *  inserted as the first line of the console.
+     * The messages can either be appended to the end of the console or inserted
+     * as the first line of the console.
      */
     public MessageConsole(final JTextComponent textComponent, final boolean isAppend) {
         _textComponent = textComponent;
@@ -46,48 +37,47 @@ public class MessageConsole {
         _isAppend = isAppend;
         textComponent.setEditable(false);
     }
-    
-    public JTextComponent getTextComponent(){
+
+    public JTextComponent getTextComponent() {
         return _textComponent;
     }
-    
-    public Document getDocument(){
+
+    public Document getDocument() {
         return _document;
     }
-    
-    public boolean getIsAppend()
-    {
+
+    public boolean getIsAppend() {
         return _isAppend;
     }
 
-    /*
-     *  Redirect the output from the standard output to the console
-     *  using the specified color and PrintStream. When a PrintStream
-     *  is specified the message will be added to the Document before
-     *  it is also written to the PrintStream.
+    /**
+     * Redirect the output from the standard output to the console using the
+     * specified color and PrintStream. When a PrintStream is specified the
+     * message will be added to the Document before it is also written to the
+     * PrintStream.
      */
     public void redirectOut(final Color textColor, final PrintStream printStream) {
         ConsoleOutputStream cos = new ConsoleOutputStream(this, textColor, printStream);
         System.setOut(new PrintStream(cos, true));
     }
 
-    /*
-     *  Redirect the output from the standard error to the console
-     *  using the specified color and PrintStream. When a PrintStream
-     *  is specified the message will be added to the Document before
-     *  it is also written to the PrintStream.
+    /**
+     * Redirect the output from the standard error to the console using the
+     * specified color and PrintStream. When a PrintStream is specified the
+     * message will be added to the Document before it is also written to the
+     * PrintStream.
      */
     public void redirectErr(final Color textColor, final PrintStream printStream) {
         ConsoleOutputStream cos = new ConsoleOutputStream(this, textColor, printStream);
         System.setErr(new PrintStream(cos, true));
     }
 
-    /*
-     *  To prevent memory from being used up you can control the number of
-     *  lines to display in the console
+    /**
+     * To prevent memory from being used up you can control the number of lines
+     * to display in the console
      *
-     *  This number can be dynamically changed, but the console will only
-     *  be updated the next time the Document is updated.
+     * This number can be dynamically changed, but the console will only be
+     * updated the next time the Document is updated.
      */
     public void setMessageLines(final int lines) {
         if (_limitLinesListener != null) {
