@@ -143,19 +143,34 @@ public class SQLDatabase {
                     pst.setString(5,
                             TweetCleaning.tweetToWords(getTweetText(status)));
 
-                    pst.setString(6,
+                    if (status.getPlace() != null) {
+                        pst.setString(6,
+                                status
+                                .getPlace()
+                                .getName()
+                                .replaceAll("[^\\p{ASCII}]", " "));
+                    } else {
+                        pst.setString(6, null);
+                    }
+
+                    pst.setString(7, status
+                            .getUser()
+                            .getLocation()
+                            .replaceAll("[^\\p{ASCII}]", " "));
+
+                    pst.setString(8,
                             status
                             .getSource()
                             .replaceAll("[^\\p{ASCII}]", " "));
 
-                    pst.setString(7, Converter.geolocationToString(
+                    pst.setString(9, Converter.geolocationToString(
                             status.getGeoLocation()));
 
-                    pst.setString(8, status.getLang());
-                    pst.setInt(9, status.getFavoriteCount());
-                    pst.setInt(10, status.getRetweetCount());
+                    pst.setString(10, status.getLang());
+                    pst.setInt(11, status.getFavoriteCount());
+                    pst.setInt(12, status.getRetweetCount());
 
-                    pst.setString(11, Converter.hashtagArrayToString(
+                    pst.setString(13, Converter.hashtagArrayToString(
                             status.getHashtagEntities()));
 
                     pst.executeUpdate();
@@ -261,9 +276,11 @@ public class SQLDatabase {
     private static final String TABLE_COLUMNS
             = " (id BIGINT NOT NULL, "
             + "createdAt DATE NOT NULL, "
-            + "screenName TINYTEXT NOT NULL, "
+            + "userScreenName TINYTEXT NOT NULL, "
             + "text VARCHAR (255) NOT NULL, "
             + "editedText VARCHAR (255) NOT NULL, "
+            + "place VARCHAR (255), "
+            + "userPlace VARCHAR (255), "
             + "source VARCHAR (255) NOT NULL, "
             + "geolocation VARCHAR (255), "
             + "lang VARCHAR (255), "
@@ -272,9 +289,21 @@ public class SQLDatabase {
             + "hashtags VARCHAR (255) NOT NULL,"
             + "PRIMARY KEY (id)) ";
 
-    private static final String PST_COLUMNS = " (id, createdAt, screenName,"
-            + " text, editedText, source, geolocation, lang, favoriteCount,"
-            + " retweetCount, hashtags) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String PST_COLUMNS
+            = " (id, "
+            + "createdAt, "
+            + "userScreenName, "
+            + "text, "
+            + "editedText, "
+            + "place, "
+            + "userPlace, "
+            + "source, "
+            + "geolocation, "
+            + "lang, "
+            + "favoriteCount, "
+            + "retweetCount, "
+            + "hashtags) "
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     private String _name;
     private Connector _connector;
