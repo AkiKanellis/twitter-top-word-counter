@@ -15,7 +15,7 @@ import utilities.generalutils.Printer;
 
 /**
  *
- * @author Dimitris
+ * @author Kanellis Dimitris
  */
 public class TweetCleaning {
 
@@ -35,24 +35,10 @@ public class TweetCleaning {
         return status;
     }
 
-    private static String removeURLs(String status) {
-            String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)|"
-                    + "(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-            Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
-            Matcher m = p.matcher(status);
-
-            while (m.find()) {
-                status = status.replace(m.group(), " ");
-            }
-        return status;
-    }
-
-    private static String removeExtraSpaces(String status) {
-        return status.replaceAll(" +", " ").trim();
-    }
-
     private static String removeStopwords(String status) {
-        try (BufferedReader br = new BufferedReader(new FileReader("stopwords.txt"))) {
+        try (BufferedReader br
+                = new BufferedReader(new FileReader("stopwords.txt"))) {
+
             for (String stopword; (stopword = br.readLine()) != null;) {
                 status = status.replaceAll("\\b" + stopword + "\\b", " ");
             }
@@ -63,5 +49,21 @@ public class TweetCleaning {
         } finally {
             return status;
         }
+    }
+
+    private static String removeURLs(String status) {
+        String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)"
+                + "|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+        Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(status);
+
+        while (m.find()) {
+            status = status.replace(m.group(), " ");
+        }
+        return status;
+    }
+
+    private static String removeExtraSpaces(final String status) {
+        return status.replaceAll(" +", " ").trim();
     }
 }
