@@ -700,7 +700,6 @@ public class MainGUI extends JFrame {
             jAutoInsertCheckbox.setEnabled(true);
             jTweetsInDatabaseLabel.setText(_currentDatabase.getRowsCount(_currentTable)
                     + " tweets currently in the database");
-            System.out.println(DASHES);
             jTopWordsButton.setEnabled(true);
         }
         jWorkingInLabel.setText("Working in: " + databaseName + " / " + tableName);
@@ -786,7 +785,6 @@ public class MainGUI extends JFrame {
     private void jRefreshDatabasesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRefreshDatabasesButtonActionPerformed
         Printer.println("Gathering available databases...");
         updateDatabaseComboBoxes();
-        System.out.println(DASHES);
     }//GEN-LAST:event_jRefreshDatabasesButtonActionPerformed
 
     private void jTableComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTableComboBoxActionPerformed
