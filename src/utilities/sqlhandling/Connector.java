@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package utilities.sqlhandling;
 
 import utilities.generalutils.Printer;
@@ -15,11 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class holds information regarding the connection to the server and
+ * functions that modify the server.
  *
  * @author Kanellis Dimitris
  */
 public class Connector {
 
+    /**
+     * The constructor initialises the variables with the given values and the
+     * URL to the default one.
+     *
+     * @param user the user which contains the username and password
+     * @param host the hostname
+     * @param port the port that will be used
+     */
     public Connector(final User user, final String host, final int port) {
         _user = user;
         _host = host;
@@ -27,18 +32,37 @@ public class Connector {
         _url = "jdbc:mysql://" + _host + ":" + _port + "/";
     }
 
+    /**
+     *
+     * @return the user of the Connector object
+     */
     public User getUser() {
         return _user;
     }
 
+    /**
+     *
+     * @return the URL of the Connector object
+     */
     public String getURL() {
         return _url;
     }
 
+    /**
+     *
+     * @return the driver of the Connector object
+     */
     public String getDriver() {
         return DRIVER;
     }
 
+    /**
+     * Checks the connection with the server by the requesting it's version and
+     * then returns it.
+     *
+     * @return the version of the server if connection was established, or an
+     * empty String if it a connection could not be made
+     */
     public String checkConnection() {
         Printer.println(GETTING_DRIVER_MESSAGE);
         try {
@@ -66,6 +90,12 @@ public class Connector {
         }
     }
 
+    /**
+     * Returns a the list of databases that the server contains through the use
+     * of Metadata.
+     *
+     * @return a list of databases names
+     */
     public List<String> getDatabases() {
         List<String> databases = new ArrayList<>();
 
@@ -96,6 +126,11 @@ public class Connector {
         }
     }
 
+    /**
+     * Creates a new database in the server with the name that was given.
+     *
+     * @param databaseName the name of the database to create
+     */
     public void createDatabase(final String databaseName) {
         Printer.println(GETTING_DRIVER_MESSAGE);
         try {
@@ -117,6 +152,11 @@ public class Connector {
         }
     }
 
+    /**
+     * Deletes a database from the server with the name that was given.
+     *
+     * @param databaseName the database to delete
+     */
     public void deleteDatabase(final String databaseName) {
         Printer.println(GETTING_DRIVER_MESSAGE);
         try {
@@ -138,7 +178,7 @@ public class Connector {
                     + se.getMessage());
         }
     }
-    
+
     public static final String GETTING_DRIVER_MESSAGE = "Getting driver...";
     public static final String CONNECTING_MESSAGE = "Connecting to server...";
 
@@ -147,7 +187,7 @@ public class Connector {
     private static final String DELETE_DATABASE_QUERY = "Drop DATABASE ";
 
     private static final String VERSION_NOT_FOUND = "";
-    
+
     private static final String DRIVER = "com.mysql.jdbc.Driver";
 
     private final User _user;
