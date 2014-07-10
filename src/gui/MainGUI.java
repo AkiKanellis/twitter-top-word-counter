@@ -8,18 +8,14 @@ package gui;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import twitter4j.Query;
 import twitter4j.Status;
 import utilities.consoleredirect.MessageConsole;
 import utilities.generalutils.*;
-import static utilities.generalutils.GeneralFileUtils.stopwordsCorrupted;
 import utilities.sqlhandling.*;
 import utilities.tweetshandling.*;
 
@@ -34,16 +30,7 @@ public class MainGUI extends JFrame {
      */
     public MainGUI() {
         initComponents();
-        try {
-            stopwordsCorrupted(new File("stopwords.txt"));
-        } catch (IOException ex) {
-            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null,
-                    ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null,
-                    ex);
-        }
-
+        
         jMessageConsoleTextPane.putClientProperty(
                 JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
         _mc = new MessageConsole(jMessageConsoleTextPane, true);
@@ -103,19 +90,19 @@ public class MainGUI extends JFrame {
         jCreateDatabaseButton = new javax.swing.JButton();
         jCreateTableButton = new javax.swing.JButton();
         jTwitterToolsPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jTimerPanel = new javax.swing.JPanel();
+        jRunForLabel = new javax.swing.JLabel();
+        jMinutesLabel = new javax.swing.JLabel();
         jMinutesSpinner = new javax.swing.JSpinner();
-        jLabel3 = new javax.swing.JLabel();
+        jHoursLabel = new javax.swing.JLabel();
         jHoursSpinner = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
+        jDaysLabel = new javax.swing.JLabel();
         jDaysSpinner = new javax.swing.JSpinner();
-        jPanel2 = new javax.swing.JPanel();
+        jFilterPanel = new javax.swing.JPanel();
         jKeywordsLabel = new javax.swing.JLabel();
         jKeywordsField = new javax.swing.JTextField();
-        jTownLabel = new javax.swing.JLabel();
-        jTownField = new javax.swing.JTextField();
+        jCityLabel = new javax.swing.JLabel();
+        jCityField = new javax.swing.JTextField();
         jSinceDateLabel = new javax.swing.JLabel();
         jSinceDateChooser = new com.toedter.calendar.JDateChooser();
         jUntilDateChooser = new com.toedter.calendar.JDateChooser();
@@ -125,7 +112,7 @@ public class MainGUI extends JFrame {
         jTopWordsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Tweet Fetcher");
+        setTitle("Tweet Analyser");
         setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         setMinimumSize(new java.awt.Dimension(782, 441));
 
@@ -366,12 +353,12 @@ public class MainGUI extends JFrame {
         jTwitterToolsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Twitter Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
         jTwitterToolsPanel.setFont(getFont());
 
-        jLabel1.setFont(getFont());
-        jLabel1.setText("Run for:");
+        jRunForLabel.setFont(getFont());
+        jRunForLabel.setText("Run for:");
 
-        jLabel2.setFont(getFont());
-        jLabel2.setLabelFor(jMinutesSpinner);
-        jLabel2.setText("Minutes:");
+        jMinutesLabel.setFont(getFont());
+        jMinutesLabel.setLabelFor(jMinutesSpinner);
+        jMinutesLabel.setText("Minutes:");
 
         jMinutesSpinner.setFont(getFont());
         jMinutesSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
@@ -381,9 +368,9 @@ public class MainGUI extends JFrame {
             }
         });
 
-        jLabel3.setFont(getFont());
-        jLabel3.setLabelFor(jHoursSpinner);
-        jLabel3.setText("Hours:");
+        jHoursLabel.setFont(getFont());
+        jHoursLabel.setLabelFor(jHoursSpinner);
+        jHoursLabel.setText("Hours:");
 
         jHoursSpinner.setFont(getFont());
         jHoursSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
@@ -393,9 +380,9 @@ public class MainGUI extends JFrame {
             }
         });
 
-        jLabel4.setFont(getFont());
-        jLabel4.setLabelFor(jDaysSpinner);
-        jLabel4.setText("Days:");
+        jDaysLabel.setFont(getFont());
+        jDaysLabel.setLabelFor(jDaysSpinner);
+        jDaysLabel.setText("Days:");
 
         jDaysSpinner.setFont(getFont());
         jDaysSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 7, 1));
@@ -405,41 +392,41 @@ public class MainGUI extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+        javax.swing.GroupLayout jTimerPanelLayout = new javax.swing.GroupLayout(jTimerPanel);
+        jTimerPanel.setLayout(jTimerPanelLayout);
+        jTimerPanelLayout.setHorizontalGroup(
+            jTimerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jTimerPanelLayout.createSequentialGroup()
+                .addGroup(jTimerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRunForLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jTimerPanelLayout.createSequentialGroup()
+                        .addComponent(jMinutesLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jMinutesSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
+                        .addComponent(jHoursLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jHoursSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
+                        .addComponent(jDaysLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jDaysSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jDaysSpinner, jHoursSpinner, jMinutesSpinner});
+        jTimerPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jDaysSpinner, jHoursSpinner, jMinutesSpinner});
 
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+        jTimerPanelLayout.setVerticalGroup(
+            jTimerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jTimerPanelLayout.createSequentialGroup()
+                .addComponent(jRunForLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                .addGroup(jTimerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jMinutesLabel)
                     .addComponent(jMinutesSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
+                    .addComponent(jHoursLabel)
                     .addComponent(jHoursSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
+                    .addComponent(jDaysLabel)
                     .addComponent(jDaysSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
@@ -448,11 +435,11 @@ public class MainGUI extends JFrame {
 
         jKeywordsField.setFont(getFont());
 
-        jTownLabel.setFont(getFont());
-        jTownLabel.setLabelFor(jTownField);
-        jTownLabel.setText("Town:");
+        jCityLabel.setFont(getFont());
+        jCityLabel.setLabelFor(jCityField);
+        jCityLabel.setText("City:");
 
-        jTownField.setFont(getFont());
+        jCityField.setFont(getFont());
 
         jSinceDateLabel.setFont(getFont());
         jSinceDateLabel.setText("Since:");
@@ -474,60 +461,60 @@ public class MainGUI extends JFrame {
         jUntilDateLabel.setFont(getFont());
         jUntilDateLabel.setText("Until:");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jFilterPanelLayout = new javax.swing.GroupLayout(jFilterPanel);
+        jFilterPanel.setLayout(jFilterPanelLayout);
+        jFilterPanelLayout.setHorizontalGroup(
+            jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFilterPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTownLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFilterPanelLayout.createSequentialGroup()
+                        .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jCityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jKeywordsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jKeywordsField, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-                            .addComponent(jTownField)))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jCityField)))
+                    .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jFilterPanelLayout.createSequentialGroup()
                             .addComponent(jUntilDateLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jUntilDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jFilterPanelLayout.createSequentialGroup()
                             .addComponent(jSinceDateLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jSinceDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jKeywordsLabel, jSinceDateLabel, jUntilDateLabel});
+        jFilterPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jKeywordsLabel, jSinceDateLabel, jUntilDateLabel});
 
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jFilterPanelLayout.setVerticalGroup(
+            jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFilterPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jKeywordsLabel)
                     .addComponent(jKeywordsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTownField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTownLabel))
+                .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCityLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSinceDateLabel)
                     .addComponent(jSinceDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jUntilDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jUntilDateLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jKeywordsLabel, jSinceDateLabel, jUntilDateLabel});
+        jFilterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jKeywordsLabel, jSinceDateLabel, jUntilDateLabel});
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jSinceDateChooser, jUntilDateChooser});
+        jFilterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jSinceDateChooser, jUntilDateChooser});
 
         jAutoInsertCheckbox.setFont(getFont());
         jAutoInsertCheckbox.setText("Insert Into Database automaticaly");
@@ -555,7 +542,7 @@ public class MainGUI extends JFrame {
             jTwitterToolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jTwitterToolsPanelLayout.createSequentialGroup()
                 .addGroup(jTwitterToolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFilterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jTwitterToolsPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jTwitterToolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -565,7 +552,7 @@ public class MainGUI extends JFrame {
                                 .addComponent(jTopWordsButton))
                             .addGroup(jTwitterToolsPanelLayout.createSequentialGroup()
                                 .addGroup(jTwitterToolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTimerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jAutoInsertCheckbox))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -573,9 +560,9 @@ public class MainGUI extends JFrame {
         jTwitterToolsPanelLayout.setVerticalGroup(
             jTwitterToolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jTwitterToolsPanelLayout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jFilterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTimerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jAutoInsertCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -895,12 +882,12 @@ public class MainGUI extends JFrame {
                 jKeywordsField.getText().trim(),
                 jSinceDateChooser.getDate(),
                 jUntilDateChooser.getDate(),
-                100);
+                101);
         while (!isDone) {
             final int previousSize = _tweets.size();
             _tweets.addAll(TwitterTools.search(query));
             TwitterTools.filterTweetsBasedOnCity(_tweets,
-                    jTownField.getText().trim());
+                    jCityField.getText().trim());
             int afterSize = _tweets.size();
             Printer.println(afterSize - previousSize
                     + " tweets were downloaded.");
@@ -1050,28 +1037,29 @@ public class MainGUI extends JFrame {
     private javax.swing.JCheckBox jAutoInsertCheckbox;
     private javax.swing.JPanel jButtonsPane;
     private javax.swing.JButton jCheckServerButton;
+    private javax.swing.JTextField jCityField;
+    private javax.swing.JLabel jCityLabel;
     private javax.swing.JButton jClearButton;
     private javax.swing.JButton jCreateDatabaseButton;
     private javax.swing.JButton jCreateTableButton;
     private javax.swing.JComboBox jDatabaseComboBox;
     private javax.swing.JLabel jDatabaseLabel;
+    private javax.swing.JLabel jDaysLabel;
     private javax.swing.JSpinner jDaysSpinner;
     private javax.swing.JButton jDeleteDatabaseButton;
     private javax.swing.JButton jDeleteTableButton;
     private javax.swing.JButton jDownloadTweetsButton;
+    private javax.swing.JPanel jFilterPanel;
+    private javax.swing.JLabel jHoursLabel;
     private javax.swing.JSpinner jHoursSpinner;
     private javax.swing.JTextField jKeywordsField;
     private javax.swing.JLabel jKeywordsLabel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jMessageConsolePane;
     private javax.swing.JTextPane jMessageConsoleTextPane;
+    private javax.swing.JLabel jMinutesLabel;
     private javax.swing.JSpinner jMinutesSpinner;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JButton jRefreshDatabasesButton;
+    private javax.swing.JLabel jRunForLabel;
     private javax.swing.JButton jRunXAMPPButton;
     private javax.swing.JPanel jSQLPanel;
     private javax.swing.JButton jSettingsButton;
@@ -1079,9 +1067,8 @@ public class MainGUI extends JFrame {
     private javax.swing.JLabel jSinceDateLabel;
     private javax.swing.JComboBox jTableComboBox;
     private javax.swing.JLabel jTableLabel;
+    private javax.swing.JPanel jTimerPanel;
     private javax.swing.JButton jTopWordsButton;
-    private javax.swing.JTextField jTownField;
-    private javax.swing.JLabel jTownLabel;
     private javax.swing.JLabel jTweetsInDatabaseLabel;
     private javax.swing.JLabel jTweetsInMemoryLabel;
     private javax.swing.JPanel jTwitterToolsPanel;
