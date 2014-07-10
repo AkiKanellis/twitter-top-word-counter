@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package utilities.generalutils;
 
 import java.io.File;
@@ -16,16 +11,28 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Static class including utilities for handling of properties files.
  *
  * @author Kanellis Dimitris
  */
 public class PropertiesFilesUtils {
 
+    /**
+     * Checks if there is any kind of error in the config.properties file.
+     *
+     * @return true if error was found, false if not
+     */
     public static boolean propertiesErrorFound() {
         File propertiesFile = new File("config.properties");
         return !propertiesFile.exists() || propertiesFileCorrupted(propertiesFile);
     }
 
+    /**
+     * Checks if the config.properties file is corrupted by making sure that the
+     * properties within it are not null.
+     *
+     * @return true if corrupted, false if not
+     */
     private static boolean propertiesFileCorrupted(File propertiesFile) {
         boolean corrupted = false;
 
@@ -48,6 +55,9 @@ public class PropertiesFilesUtils {
         }
     }
 
+    /**
+     * Creates a new config.properties file and sets the default values to it.
+     */
     public static void setDefaultPropertyFile() {
         try (OutputStream output = new FileOutputStream("config.properties");) {
             Properties prop = new Properties();
@@ -62,13 +72,19 @@ public class PropertiesFilesUtils {
         }
     }
 
+    /**
+     * Gets the property value from the given key
+     *
+     * @param key the given key
+     * @return the key's value
+     */
     public static String getPropertyValue(final String key) {
         String value = null;
 
         try (InputStream input = new FileInputStream("config.properties");) {
             Properties prop = new Properties();
             prop.load(input);
-            
+
             value = prop.getProperty(key);
             return value;
         } catch (IOException ex) {
@@ -77,6 +93,11 @@ public class PropertiesFilesUtils {
         }
     }
 
+    /**
+     * Updates the property file with the Pair that was given.
+     *
+     * @param pair the Pair of <Key, Value> tha was given
+     */
     public static void updatePropertyFile(final Pair<String, String> pair) {
         Properties prop = new Properties();
         OutputStream output = null;
@@ -111,6 +132,13 @@ public class PropertiesFilesUtils {
         }
     }
 
+    /**
+     * Just like updatePropertyFile(final Pair<String, String> pair) except this
+     * one updates the file with multiple <Key, Value> Pairs that were given in
+     * the form of a list.
+     *
+     * @param pairs the list of Pairs
+     */
     public static void updatePropertyFile(final List<Pair<String, String>> pairs) {
         Properties prop = new Properties();
         OutputStream output = null;
