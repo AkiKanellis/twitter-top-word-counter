@@ -96,7 +96,7 @@ public class PropertiesFilesUtils {
     /**
      * Updates the property file with the Pair that was given.
      *
-     * @param pair the Pair of <Key, Value> tha was given
+     * @param pair the Pair of (Key,Value) that was given
      */
     public static void updatePropertyFile(final Pair<String, String> pair) {
         Properties prop = new Properties();
@@ -133,9 +133,11 @@ public class PropertiesFilesUtils {
     }
 
     /**
-     * Just like updatePropertyFile(final Pair<String, String> pair) except this
-     * one updates the file with multiple <Key, Value> Pairs that were given in
+     * Just like updatePropertyFile(utilities.generalutils.Pair)  except this
+     * one updates the file with multiple (Key,Value) Pairs that were given in
      * the form of a list.
+     * 
+     * @see #updatePropertyFile(utilities.generalutils.Pair) 
      *
      * @param pairs the list of Pairs
      */
