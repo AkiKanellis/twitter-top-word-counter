@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package utilities.tweetshandling;
 
 import java.text.DateFormat;
@@ -20,11 +15,18 @@ import twitter4j.TwitterFactory;
 import utilities.generalutils.Printer;
 
 /**
+ * Static class which contains tools regarding search on the Twitter API.
  *
  * @author Kanellis Dimitris
  */
 public class TwitterTools {
 
+    /**
+     * Gets the maximum number of tweets with the query given from the API.
+     *
+     * @param query the query that was given
+     * @return a list of Status that were downloaded
+     */
     public static List<Status> search(Query query) {
         QueryResult result;
         List<Status> tweets = new ArrayList<>();
@@ -46,6 +48,13 @@ public class TwitterTools {
         }
     }
 
+    /**
+     * For every status in the list, if the statu's place or the user's place
+     * does not equal the city given then that status is removed from the list.
+     *
+     * @param tweets the list of tweets
+     * @param city the city to filter the list by
+     */
     public static void filterTweetsBasedOnCity(final List<Status> tweets,
             final String city) {
 
@@ -66,16 +75,28 @@ public class TwitterTools {
         }
     }
 
+    /**
+     * Creates a query based on the filters that were given.
+     *
+     * If no keywords were given then the letter 'a' is used as a keyword since
+     * the Twitter API does not support empty queries.
+     *
+     * @param keywords keywords to search in the API
+     * @param since starting date to find tweets from
+     * @param until ending date to find tweets from
+     * @param count maximum number of tweets to return per page (max 100)
+     * @return the query with the filters set
+     */
     public static Query queryMaker(final String keywords, final Date since,
             final Date until, final int count) {
-        
+
         Query query;
         if (keywords.isEmpty()) {
             query = new Query("a");
         } else {
             query = new Query(keywords);
         }
-        
+
         query.setCount(count);
         query.setLang("en");
         query.setResultType(Query.ResultType.recent);
