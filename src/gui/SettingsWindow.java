@@ -1,21 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import javax.swing.JPanel;
 import utilities.generalutils.PropertiesFilesUtils;
 
 /**
+ * Creates a settings windows from which various server settings can be
+ * accessed.
  *
  * @author Kanellis Dimitris
  */
 public class SettingsWindow extends JPanel {
 
     /**
-     * Creates new form UserSettings
+     * Creates new form UserSettings.
+     *
+     * If an error was found in the properties file then it creates a new one
+     * with the default values.
      */
     public SettingsWindow() {
         initComponents();
@@ -174,18 +174,34 @@ public class SettingsWindow extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     *
+     * @return the username that was entered.
+     */
     public String getUsername() {
         return jUsernameField.getText().trim();
     }
 
+    /**
+     *
+     * @return the password that was entered.
+     */
     public String getPassword() {
         return jPasswordField.getText().trim();
     }
 
+    /**
+     *
+     * @return the hostname that was entered.
+     */
     public String getHostname() {
         return jHostnameField.getText().trim();
     }
 
+    /**
+     *
+     * @return the port that was entered.
+     */
     public String getPort() {
         return jPortField.getText().trim();
     }
