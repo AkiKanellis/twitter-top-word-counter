@@ -15,21 +15,39 @@ import utilities.generalutils.Printer;
 import utilities.tweetshandling.TweetCleaning;
 
 /**
+ * Class representing a database in the server with a name, a connector object
+ * and a proper URl encoded in UTF-8.
  *
  * @author Kanellis Dimitris
  */
 public class SQLDatabase {
 
+    /**
+     * The constructor initialises the variables with the given values and the
+     * URL to the Connector object's URL with the name of the database and the
+     * encoding appended.
+     *
+     * @param name the name of the database
+     * @param connector the Connector object
+     */
     public SQLDatabase(final String name, final Connector connector) {
         _name = name;
         _connector = connector;
         _url = connector.getURL() + name + URL_ENCODING;
     }
 
+    /**
+     *
+     * @return the name of the database
+     */
     public String getName() {
         return _name;
     }
 
+    /**
+     *
+     * @return a list of table names within the database
+     */
     public List<String> getTables() {
         final List<String> tables = new ArrayList<>();
 
@@ -62,6 +80,11 @@ public class SQLDatabase {
         }
     }
 
+    /**
+     * Creates a new table in the database with the name that was given.
+     *
+     * @param tableName the name of the table to create
+     */
     public void createTable(final String tableName) {
         Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
@@ -84,6 +107,11 @@ public class SQLDatabase {
         }
     }
 
+    /**
+     * Deletes a table from the database with the name that was given.
+     *
+     * @param tableName the table to delete
+     */
     public void deleteTable(final String tableName) {
         Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
@@ -106,6 +134,13 @@ public class SQLDatabase {
         }
     }
 
+    /**
+     * Inserts a list of statuses (tweets) in the table that is given. If the
+     * status is already in the database then it will not be inserted.
+     *
+     * @param statuses the list of statuses to insert
+     * @param tableName the name of the table to insert to
+     */
     public void insert(final List<Status> statuses, final String tableName) {
         Printer.println(Connector.GETTING_DRIVER_MESSAGE);
         try {
@@ -180,6 +215,15 @@ public class SQLDatabase {
         }
     }
 
+    /**
+     * Returns a list of strings by retrieving them from the given field of the
+     * given table.
+     *
+     * @param field the field that was given
+     * @param tableName the name of the table that was given
+     * @return a list of Strings where each element contains a row of edited
+     * text
+     */
     public List<String> getField(final String field, final String tableName) {
         final List<String> editedText = new ArrayList<>();
         final String query = "SELECT " + field + " FROM " + tableName;
@@ -212,6 +256,12 @@ public class SQLDatabase {
         }
     }
 
+    /**
+     * Returns the total number of rows in the given table.
+     *
+     * @param tableName the name of the given table
+     * @return an integer number of the number of rows in the table
+     */
     public int getRowsCount(final String tableName) {
         int rowsCount = -1;
         final String query = COUNT_ROWS_QUERY + tableName;
@@ -239,6 +289,13 @@ public class SQLDatabase {
         }
     }
 
+    /**
+     * Checks if a given status (tweet) is already in the database.
+     *
+     * @param status the status to check
+     * @param con the connection object to use
+     * @return true if it exists, false if not
+     */
     private boolean rowExists(final Status status, final Connection con,
             final String tableName) throws SQLException {
         final String query = "SELECT *"
@@ -250,6 +307,15 @@ public class SQLDatabase {
         }
     }
 
+    /**
+     * Returns the text from a status. If the status is a retweet then the
+     * retweeted text will be returned.
+     *
+     * The text is first cleaned up from non-ASCII characters before returned.
+     *
+     * @param status the status to get the text from
+     * @return the text to return
+     */
     private static String getTweetText(final Status status) {
         if (status.isRetweet()) {
             return status
@@ -300,7 +366,7 @@ public class SQLDatabase {
             + "hashtags) "
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-    private String _name;
+    private final String _name;
     private final Connector _connector;
-    private String _url;
+    private final String _url;
 }
