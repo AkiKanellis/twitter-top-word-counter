@@ -9,3 +9,11 @@ Execution
   1. Download the `Release` folder
   2. Open the CommandPrompt inside the folder
   3. Type the command `java -jar Tweet_Analyser.jar`
+  
+
+Libraries used
+=======================
+
+* JCalendar 1.4 (http://toedter.com/jcalendar)
+* MySQL Connector 5.1.4 (http://www.mysql.com/products/connector)
+* Twitter4J 4.0.1 (http://twitter4j.org)
