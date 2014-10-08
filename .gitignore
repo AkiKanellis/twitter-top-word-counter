@@ -1,1 +1,7 @@
-/nbproject/private/
+/build
+/dist
+/nbproject
+/build.xml
+/manifest.mf
+/twitter4j.properties
+Release/twitter4j.properties
