@@ -14,9 +14,8 @@ Installation:
 Execution
 =======================
 
-  1. Download the `Release` folder
-  2. Open the CommandPrompt inside the folder
-  3. Type the command `java -jar Tweet_Analyser.jar`
+  1. Open the `release` folder
+  2. Double click the executable
   
 
 Libraries used
