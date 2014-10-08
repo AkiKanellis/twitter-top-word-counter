@@ -6,7 +6,7 @@ A software for fetching, storing and analyzing tweets. Specifically you can choo
 Installation:
 =========================
 
-  1. Download Java 7 and up from here: http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html
+  1. Download Java 8 and up from here: http://www.oracle.com/technetwork/java/javase/downloads
   2. Download the `release` folder to an easily reachabe location, for example `C:\release`
   3. Rename `release/twitter.example.properties` to `release/twitter.properties`
   4. Open the `release/twitter.properties` file and fill in the 4 keys that you have from Twitter API (oauth.consumerKey, oauth.consumerSecret, oauth.accessToken, oauth.accessTokenSecret)
